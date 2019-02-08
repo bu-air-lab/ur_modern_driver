@@ -14,6 +14,9 @@ Q1 = [2.2,0,-1.57,0,0,0]
 Q2 = [1.5,0,-1.57,0,0,0]
 Q3 = [1.5,-0.2,-1.57,0,0,0]
     
+#Q1 = [2.2,0,0,0,0,0]
+#Q2 = [1.5,0,0,0,0,0]
+#Q3 = [1.5,0,0,0,0,0]
 client = None
 
 def move1():
@@ -68,18 +71,18 @@ def move_repeated():
     try:
         joint_states = rospy.wait_for_message("joint_states", JointState)
         joints_pos = joint_states.position
-        d = 2.0
+        d = 4.0
         g.trajectory.points = [JointTrajectoryPoint(positions=joints_pos, velocities=[0]*6, time_from_start=rospy.Duration(0.0))]
-        for i in range(10):
+        for i in range(4):
             g.trajectory.points.append(
                 JointTrajectoryPoint(positions=Q1, velocities=[0]*6, time_from_start=rospy.Duration(d)))
-            d += 1
+            d += 3
             g.trajectory.points.append(
                 JointTrajectoryPoint(positions=Q2, velocities=[0]*6, time_from_start=rospy.Duration(d)))
-            d += 1
+            d += 3
             g.trajectory.points.append(
                 JointTrajectoryPoint(positions=Q3, velocities=[0]*6, time_from_start=rospy.Duration(d)))
-            d += 2
+            d += 3
         client.send_goal(g)
         client.wait_for_result()
     except KeyboardInterrupt:
